@@ -1,6 +1,9 @@
 # FleetApp
 
-Fleet Client App is used for data validations.
+Fleet Client App is used for fleet data validations in accordance with compliance.
+
+[![Build and Test FleetClientApp](https://github.com/AvinashEroad/FleetApp/actions/workflows/build.yml/badge.svg)](https://github.com/AvinashEroad/FleetApp/actions/workflows/build.yml)
+[![Build and Deploy FleetClientApp to Azure Web App](https://github.com/AvinashEroad/FleetApp/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/AvinashEroad/FleetApp/actions/workflows/deploy.yml)
 
 ## Data Check
 
