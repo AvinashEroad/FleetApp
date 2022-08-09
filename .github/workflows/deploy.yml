@@ -1,0 +1,64 @@
+name: Build and deploy FleetClientApp to Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  solution_file: '${{ secrets.FLEET_APP_NAME }}.sln'
+  nuget_feed_name: '${{ secrets.FLEET_APP_NAME }}'
+  nuget_feed_source: 'https://pkgs.dev.azure.com/${{ secrets.AZURE_DEVOPS_ORGANIZATION }}/${{ secrets.FLEET_APP_FEED }}/_packaging/${{ secrets.FLEET_APP_NAME }}/nuget/v3/index.json'
+  nuget_config: 'nuget.config'
+  azure_webapp_name: 'FleetClientApp'
+  dotnet_version: '6.0.x'
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+        include-prerelease: true
+        
+    - name: Auth Core360 NuGet
+      run: dotnet nuget add source ${{ env.nuget_feed_source }} --name ${{ env.nuget_feed_name }} --username az --password ${{ secrets.AZURE_DEVOPS_TOKEN }} --configfile ${{ env.nuget_config }}
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+    
+    - name: dotnet Publish
+      run: dotnet publish -c Release -o '${{ env.DOTNET_ROOT }}/fleepapp'
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: .fleet-app
+        path: ${{env.DOTNET_ROOT}}/fleepapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .fleet-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.azure_webapp_name }}
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
+          package: .

@@ -1,0 +1,121 @@
+﻿@page "/datacheck/event"
+
+@inject IJSRuntime JSRuntime
+
+<h3><span class="oi oi-clock" aria-hidden="true"></span> Event Data Check</h3>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEventType">Event Type</label>
+            <input type="number" class="form-control" id="inputEventType" placeholder="Event Type" @bind="eventType">
+            <small id="eventTypeHelp" class="form-text text-muted">Sample Event Type: 1 (Status Change)</small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEventCode">Event Code</label>
+            <input type="number" class="form-control" id="inputEventCode" placeholder="Event Code" @bind="eventCode">
+            <small id="eventCodeHelp" class="form-text text-muted">Sample Event Code: 3 (Driving)</small>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEventDate">Event Date</label>
+            <input type="date" class="form-control" id="inputEventDate" placeholder="Event Date" @bind="eventDate">
+            <small id="eventDateHelp" class="form-text text-muted">Event Date</small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEventTime">Event Time</label>
+            <input type="time" step="1" class="form-control" id="inputEventTime" placeholder="Event Time" @bind="eventTime">
+            <small id="eventTimeHelp" class="form-text text-muted">Event Time</small>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputVehicleDistance">Vehicle Distance</label>
+            <input type="text" class="form-control" id="inputVehicleDistance" placeholder="Accumulated Vehicle Distance or Vehicle Miles" @bind="vehicleDistance">
+            <small id="vehicleDistanceHelp" class="form-text text-muted">Accumulated Vehicle Distance (CCMTA) or Vehicle Miles (FMCSA)</small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEngineTime">Engine Hours</label>
+            <input type="text" class="form-control" id="inputEngineTime" placeholder="Engine Hours" @bind="engineHours">
+            <small id="engineHoursHelp" class="form-text text-muted">Elapsed Engine Hours (CCMTA) or Engine Hours (FMCSA)</small>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputLatitude">Latitude</label>
+            <input type="text" class="form-control" id="inputLatitude" placeholder="Latitude" @bind="latitude">
+            <small id="latitudeHelp" class="form-text text-muted">Latitude <a href="" target="_blank" @onclick="NavigateToMaps">Click here</a></small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputLongitude">Longitude</label>
+            <input type="text" class="form-control" id="inputLongitude" placeholder="Longitude" @bind="longitude">
+            <small id="longitudeHelp" class="form-text text-muted">Longitude <a href="" target="_blank" @onclick="NavigateToMaps">Click here</a></small>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputVehicleName">Vehicle Name</label>
+            <input type="text" class="form-control" id="inputVehicleName" placeholder="Vehicle Name" @bind="vehicleName">
+            <small id="vehicleNameHelp" class="form-text text-muted">CMV Power Unit Number (CCMTA) or CMV Number (FMCSA)</small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputUsername">Username or Driver PIN</label>
+            <input type="text" class="form-control" id="inputUsername" placeholder="Username or Driver PIN" @bind="userName">
+            <small id="userNameHelp" class="form-text text-muted">ELD Username</small>
+        </div>
+    </div>
+    <button type="button" @onclick="CalculateEventDataCheck" class="btn btn-primary">Calculate</button>
+</form>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputResult">Event Data Checksum String</label>
+            <input type="text" class="form-control" id="inputEventDataChecksumStringResult" placeholder="Result" @bind="eventDataChecksumStringResult" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputResult">Event Data Checksum Result</label>
+            <input type="text" class="form-control" id="inputEventDataChecksumResult" placeholder="Result" @bind="eventDataChecksumResult" readonly>
+        </div>
+    </div>
+</form>
+
+@code {
+    int eventType { get; set; }
+    int eventCode { get; set; }
+    DateTime? eventDate { get; set; }
+    DateTime? eventTime { get; set; }
+    string vehicleDistance { get; set; }
+    string engineHours { get; set; }
+    string latitude { get; set; }
+    string longitude { get; set; }
+    string vehicleName { get; set; }
+    string userName { get; set; }
+    string eventDataChecksumResult { get; set; }
+    string eventDataChecksumStringResult { get; set; }
+    void CalculateEventDataCheck()
+    {
+        var input = new EldEventInput
+        {
+            EventType = eventType,
+            EventCode = eventCode,
+            EventDate = eventDate,
+            EventTime = eventTime,
+            VehicleDistance = vehicleDistance,
+            EngineHours = engineHours,
+            Latitude = latitude,
+            Longitude = longitude,
+            CmvPowerUnitNumber = vehicleName,
+            EldUserName = userName
+        };
+        var eventDataCheck = EldEventInputHelper.GetEventDataCheck(input);
+        eventDataChecksumResult = eventDataCheck.eventDataCheckSum;
+        eventDataChecksumStringResult = eventDataCheck.eventDataCheckSumString;
+    }
+    async void NavigateToMaps()
+    {
+        var url = $"https://maps.google.com/?q={latitude},{longitude}";
+        await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+    }
+}

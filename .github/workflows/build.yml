@@ -1,0 +1,39 @@
+name: Build and Test FleetClientApp
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  solution_file: '${{ secrets.FLEET_APP_NAME }}.sln'
+  nuget_feed_name: '${{ secrets.FLEET_APP_NAME }}'
+  nuget_feed_source: 'https://pkgs.dev.azure.com/${{ secrets.AZURE_DEVOPS_ORGANIZATION }}/${{ secrets.FLEET_APP_FEED }}/_packaging/${{ secrets.FLEET_APP_NAME }}/nuget/v3/index.json'
+  nuget_config: 'nuget.config'
+  dotnet_version: '6.0.x'
+  
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+        
+    - name: Auth Core360 NuGet
+      run: dotnet nuget add source ${{ env.nuget_feed_source }} --name ${{ env.nuget_feed_name }} --username az --password ${{ secrets.AZURE_DEVOPS_TOKEN }} --configfile ${{ env.nuget_config }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Test
+      run: dotnet test --no-build --verbosity normal

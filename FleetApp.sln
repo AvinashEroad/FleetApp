@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetApp", "FleetApp\FleetApp.csproj", "{AD1B9B1C-A013-41BD-A573-40D6076EF02A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Local|Any CPU = Local|Any CPU
+		LocalMessageAPI|Any CPU = LocalMessageAPI|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Local|Any CPU.Build.0 = Release|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.LocalMessageAPI|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.LocalMessageAPI|Any CPU.Build.0 = Release|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1B9B1C-A013-41BD-A573-40D6076EF02A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE22D570-D5AB-416A-A4D2-CD8EB895DE08}
+	EndGlobalSection
+EndGlobal

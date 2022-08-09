@@ -1,0 +1,39 @@
+﻿@page "/cryptography/encrypt"
+
+<h3><span class="oi oi-lock-locked" aria-hidden="true"></span> Encrypt Raw Value</h3>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputRawValue">Raw Value</label>
+            <input type="text" class="form-control" id="inputRawValue" placeholder="Raw Value" @bind="rawValue">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputGuidKey">Guid Key</label>
+            <input type="text" class="form-control" id="inputGuidKey" placeholder="Guid Key" @bind="guidKey">
+        </div>
+    </div>
+    <button type="button" @onclick="Encrypt" class="btn btn-dark">
+        <i class="oi oi-lock-locked"></i> Encrypt
+    </button>
+</form>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputCipherValue">Cipher Value</label>
+            <input type="text" class="form-control" id="inputCipherValue" placeholder="Cipher Value" @bind="cipherValue" readonly>
+        </div>
+    </div>
+
+</form>
+
+@code {
+    string rawValue { get; set; }
+    string guidKey { get; set; }
+    string cipherValue { get; set; }
+    void Encrypt()
+    {
+        cipherValue = CryptoHelper.Encrypt(guidKey, rawValue);
+    }
+}

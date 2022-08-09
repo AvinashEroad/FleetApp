@@ -1,0 +1,39 @@
+﻿@page "/cryptography/decrypt"
+
+<h3><span class="oi oi-lock-unlocked" aria-hidden="true"></span> Decrypt Cipher Value</h3>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputCipherValue">Cipher Value</label>
+            <input type="text" class="form-control" id="inputCipherValue" placeholder="Cipher Value" @bind="cipherValue">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputGuidKey">Guid Key</label>
+            <input type="text" class="form-control" id="inputGuidKey" placeholder="Guid Key" @bind="guidKey">
+        </div>
+    </div>
+    <button type="button" @onclick="Decrypt" class="btn btn-info">
+        <i class="oi oi-lock-unlocked"></i> Decrypt
+    </button>
+</form>
+<hr />
+<form>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputRawValue">Raw Value</label>
+            <input type="text" class="form-control" id="inputRawValue" placeholder="Raw Value" @bind="rawValue" readonly>
+        </div>
+    </div>
+
+</form>
+
+@code {
+    string cipherValue { get; set; }
+    string guidKey { get; set; }
+    string rawValue { get; set; }
+    void Decrypt()
+    {
+        rawValue = CryptoHelper.Decrypt(guidKey, cipherValue);
+    }
+}

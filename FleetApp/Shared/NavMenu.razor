@@ -1,0 +1,75 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Fleet App</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="()=>dataCheckMenu= !dataCheckMenu">
+                <span class="oi oi-calculator" aria-hidden="true"></span> Data Check
+            </NavLink>
+            @if (dataCheckMenu)
+            {
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="datacheck/event">
+                        <span class="oi oi-clock" aria-hidden="true"></span> Event Data Check
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="datacheck/line">
+                        <span class="oi oi-list" aria-hidden="true"></span> Line Data Check
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="datacheck/file">
+                        <span class="oi oi-file" aria-hidden="true"></span> File Data Check
+                    </NavLink>
+                </li>
+            </ul>
+            }
+        </li>
+        <li class="nav-item px-3" hidden="hidden">
+            <NavLink class="nav-link" @onclick="()=>cryptoMenu= !cryptoMenu">
+                <span class="oi oi-shield" aria-hidden="true"></span> Cryptography
+            </NavLink>
+            @if (cryptoMenu)
+            {
+            <ul class="nav flex-column">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="cryptography/encrypt">
+                        <span class="oi oi-lock-locked" aria-hidden="true"></span> Encrypt
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="cryptography/decrypt">
+                        <span class="oi oi-lock-unlocked" aria-hidden="true"></span> Decrypt
+                    </NavLink>
+                </li>
+            </ul>
+            }
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private bool dataCheckMenu;
+    private bool cryptoMenu;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
