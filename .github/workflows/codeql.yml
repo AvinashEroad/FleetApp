@@ -41,17 +41,3 @@ jobs:
         
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
-      
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: ${{ env.dotnet_version }}
-      
-    - name: Build .NET with CodeQL
-      run: |
-        dotnet nuget add source ${{ env.nuget_feed_source }} --name ${{ env.nuget_feed_name }} --username az --password ${{ secrets.AZURE_DEVOPS_TOKEN }} --configfile ${{ env.nuget_config }}
-        dotnet restore
-        dotnet build --configuration Debug
-    
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
